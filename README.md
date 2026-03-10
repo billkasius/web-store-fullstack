@@ -12,8 +12,8 @@ CRUD-система для управления товарами с поиско
 
 ### 1. Клонировать репозиторий
 ```bash
-git clone <ссылка на репозиторий>
-cd products-api
+git clone [<ссылка на репозиторий>](https://github.com/t1matoma/web-store-back)
+cd web-store-back
 ```
 
 ### 2. Установить зависимости
