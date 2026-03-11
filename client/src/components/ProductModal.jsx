@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { X, Save, Plus } from 'lucide-react';
+import { useLang } from '../contexts/LangContext';
 
 export default function ProductModal({ product, onSave, onClose }) {
   const isEdit = !!product;
+  const { t } = useLang();
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -38,7 +40,7 @@ export default function ProductModal({ product, onSave, onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{isEdit ? 'Редактировать товар' : 'Новый товар'}</h2>
+          <h2>{isEdit ? t.editProduct : t.newProduct}</h2>
           <button className="modal-close" onClick={onClose}>
             <X size={20} />
           </button>
@@ -46,29 +48,29 @@ export default function ProductModal({ product, onSave, onClose }) {
 
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
-            <label>Название *</label>
+            <label>{t.productName}</label>
             <input
               type="text"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Название товара"
+              placeholder={t.productNamePlaceholder}
               required
             />
           </div>
 
           <div className="form-group">
-            <label>Описание</label>
+            <label>{t.description}</label>
             <textarea
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="Описание товара"
+              placeholder={t.descriptionPlaceholder}
               rows={3}
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Цена *</label>
+              <label>{t.priceStar}</label>
               <input
                 type="number"
                 step="0.01"
@@ -81,7 +83,7 @@ export default function ProductModal({ product, onSave, onClose }) {
             </div>
 
             <div className="form-group">
-              <label>На складе</label>
+              <label>{t.stockLabel}</label>
               <input
                 type="number"
                 min="0"
@@ -93,21 +95,21 @@ export default function ProductModal({ product, onSave, onClose }) {
           </div>
 
           <div className="form-group">
-            <label>Категория</label>
+            <label>{t.categoryLabel}</label>
             <input
               type="text"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              placeholder="Например: электроника"
+              placeholder={t.categoryPlaceholder}
             />
           </div>
 
           <div className="modal-actions">
             <button type="button" className="btn btn-ghost" onClick={onClose}>
-              Отмена
+              {t.cancel}
             </button>
             <button type="submit" className="btn btn-primary">
-              {isEdit ? <><Save size={18} /> Сохранить</> : <><Plus size={18} /> Создать</>}
+              {isEdit ? <><Save size={18} /> {t.save}</> : <><Plus size={18} /> {t.create}</>}
             </button>
           </div>
         </form>

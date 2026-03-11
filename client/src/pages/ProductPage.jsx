@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Tag, Layers, Calendar, Package } from 'lucide-react';
 import { api } from '../services/api';
+import { useLang } from '../contexts/LangContext';
 
 export default function ProductPage() {
   const { id } = useParams();
+  const { t } = useLang();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +28,7 @@ export default function ProductPage() {
     return (
       <div className="page-center">
         <div className="spinner" />
-        <p>Загрузка...</p>
+        <p>{t.loading}</p>
       </div>
     );
   }
@@ -34,8 +36,8 @@ export default function ProductPage() {
   if (error) {
     return (
       <div className="page-center">
-        <p className="error-text">Ошибка: {error}</p>
-        <Link to="/" className="btn btn-primary">На главную</Link>
+        <p className="error-text">{t.errorLoading}: {error}</p>
+        <Link to="/" className="btn btn-primary">{t.store}</Link>
       </div>
     );
   }
@@ -43,20 +45,22 @@ export default function ProductPage() {
   const categoryIcons = {
     'электроника': '📱', 'одежда': '👕', 'еда': '🍕',
     'книги': '📚', 'спорт': '⚽', 'игры': '🎮',
+    'electronics': '📱', 'clothing': '👕', 'food': '🍕',
+    'books': '📚', 'sports': '⚽', 'games': '🎮',
   };
   const emoji = categoryIcons[product.category?.toLowerCase()] || '📦';
 
   return (
     <div className="product-page">
-      <div className="product-page-inner">
+      <div className="product-page-inner fade-in-up">
         <Link to="/" className="back-link">
           <ArrowLeft size={20} />
-          <span>Назад к каталогу</span>
+          <span>{t.backToCatalog}</span>
         </Link>
 
         <div className="product-detail">
           <div className="product-detail-image">
-            <div className="product-detail-icon">
+            <div className="product-detail-icon pulse-glow">
               <span className="detail-emoji">{emoji}</span>
             </div>
           </div>
@@ -72,9 +76,9 @@ export default function ProductPage() {
               <h1>{product.name}</h1>
             </div>
 
-            {product.description && (
-              <p className="product-detail-desc">{product.description}</p>
-            )}
+            <p className="product-detail-desc">
+              {product.description || t.noDescription}
+            </p>
 
             <div className="product-detail-price">
               <span className="detail-price-value">${product.price}</span>
@@ -83,18 +87,18 @@ export default function ProductPage() {
             <div className="product-detail-meta">
               <div className="meta-item">
                 <Layers size={18} />
-                <span>На складе: <strong>{product.stock} шт.</strong></span>
+                <span>{t.stock}: <strong>{product.stock} {t.pcs}</strong></span>
               </div>
               <div className="meta-item">
                 <Calendar size={18} />
-                <span>Добавлен: <strong>{product.created_at}</strong></span>
+                <span>{t.added}: <strong>{product.created_at}</strong></span>
               </div>
               <div className="meta-item">
                 <Package size={18} />
                 <span>
-                  Статус:{' '}
+                  {t.status}:{' '}
                   <strong className={product.stock > 0 ? 'text-green' : 'text-red'}>
-                    {product.stock > 0 ? 'В наличии' : 'Нет в наличии'}
+                    {product.stock > 0 ? t.available : t.unavailable}
                   </strong>
                 </span>
               </div>

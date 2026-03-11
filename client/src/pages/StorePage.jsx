@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Package, TrendingUp, Boxes, Sparkles } from 'lucide-react';
 import { useProducts } from '../hooks/useProducts';
+import { useLang } from '../contexts/LangContext';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 
 export default function StorePage() {
+  const { t } = useLang();
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -36,39 +38,37 @@ export default function StorePage() {
     <div className="store-page">
       <section className="hero">
         <div className="hero-bg" />
-        <div className="hero-content">
+        <div className="hero-content fade-in-up">
           <div className="hero-badge">
             <Sparkles size={16} />
-            <span>Премиум маркетплейс</span>
+            <span>{t.heroBadge}</span>
           </div>
           <h1 className="hero-title">
-            Добро пожаловать в <span className="gradient-text">TomaStore</span>
+            {t.heroTitle1} <span className="gradient-text">{t.heroTitle2}</span>
           </h1>
-          <p className="hero-subtitle">
-            Откройте для себя лучшие товары по невероятным ценам
-          </p>
+          <p className="hero-subtitle">{t.heroSubtitle}</p>
 
           {stats && (
             <div className="hero-stats">
-              <div className="stat">
+              <div className="stat stat-animate" style={{ animationDelay: '0.1s' }}>
                 <Package size={20} />
                 <div>
                   <span className="stat-value">{stats.total}</span>
-                  <span className="stat-label">Товаров</span>
+                  <span className="stat-label">{t.products}</span>
                 </div>
               </div>
-              <div className="stat">
+              <div className="stat stat-animate" style={{ animationDelay: '0.2s' }}>
                 <Boxes size={20} />
                 <div>
                   <span className="stat-value">{stats.categories}</span>
-                  <span className="stat-label">Категорий</span>
+                  <span className="stat-label">{t.categories}</span>
                 </div>
               </div>
-              <div className="stat">
+              <div className="stat stat-animate" style={{ animationDelay: '0.3s' }}>
                 <TrendingUp size={20} />
                 <div>
                   <span className="stat-value">${stats.avgPrice}</span>
-                  <span className="stat-label">Средняя цена</span>
+                  <span className="stat-label">{t.avgPrice}</span>
                 </div>
               </div>
             </div>
@@ -82,32 +82,32 @@ export default function StorePage() {
         {loading && (
           <div className="loading-state">
             <div className="spinner" />
-            <p>Загрузка товаров...</p>
+            <p>{t.loading}</p>
           </div>
         )}
 
         {error && (
           <div className="error-state">
-            <p>Ошибка: {error}</p>
+            <p>{t.errorLoading}: {error}</p>
           </div>
         )}
 
         {!loading && !error && products.length === 0 && (
-          <div className="empty-state">
+          <div className="empty-state fade-in-up">
             <Package size={64} strokeWidth={1} />
-            <h3>Товары не найдены</h3>
-            <p>Попробуйте изменить параметры поиска</p>
+            <h3>{t.productNotFound}</h3>
+            <p>{t.resetFilters}</p>
           </div>
         )}
 
         {!loading && !error && products.length > 0 && (
           <>
             <div className="results-count">
-              Найдено: <strong>{products.length}</strong> товаров
+              {t.found}: <strong>{products.length}</strong> {t.items}
             </div>
             <div className="products-grid">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {products.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
               ))}
             </div>
           </>
