@@ -1,8 +1,10 @@
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 import { useState } from 'react';
+import { useLang } from '../contexts/LangContext';
 
 export default function SearchBar({ filters, onFilterChange }) {
   const [showFilters, setShowFilters] = useState(false);
+  const { t } = useLang();
 
   return (
     <div className="search-section">
@@ -10,7 +12,7 @@ export default function SearchBar({ filters, onFilterChange }) {
         <Search size={20} className="search-icon" />
         <input
           type="text"
-          placeholder="Поиск товаров..."
+          placeholder={t.searchPlaceholder}
           value={filters.search}
           onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
           className="search-input"
@@ -28,23 +30,23 @@ export default function SearchBar({ filters, onFilterChange }) {
           onClick={() => setShowFilters(!showFilters)}
         >
           <SlidersHorizontal size={18} />
-          <span>Фильтры</span>
+          <span>{t.filters}</span>
         </button>
       </div>
 
       {showFilters && (
         <div className="filters-panel">
           <div className="filter-group">
-            <label>Категория</label>
+            <label>{t.category}</label>
             <input
               type="text"
-              placeholder="Например: электроника"
+              placeholder={t.categoryPlaceholder}
               value={filters.category}
               onChange={(e) => onFilterChange({ ...filters, category: e.target.value })}
             />
           </div>
           <div className="filter-group">
-            <label>Мин. цена</label>
+            <label>{t.minPrice}</label>
             <input
               type="number"
               placeholder="0"
@@ -53,7 +55,7 @@ export default function SearchBar({ filters, onFilterChange }) {
             />
           </div>
           <div className="filter-group">
-            <label>Макс. цена</label>
+            <label>{t.maxPrice}</label>
             <input
               type="number"
               placeholder="999999"
@@ -68,7 +70,7 @@ export default function SearchBar({ filters, onFilterChange }) {
             }
           >
             <X size={16} />
-            Сбросить
+            {t.resetFilters}
           </button>
         </div>
       )}
